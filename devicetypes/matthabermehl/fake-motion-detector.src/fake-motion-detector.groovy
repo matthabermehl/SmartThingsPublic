@@ -18,23 +18,36 @@
 metadata {
 	definition (name: "Fake Motion Detector", namespace: "matthabermehl", author: "Matt Habermehl") {
 		capability "Motion Sensor"
+        capability "Actuator"
+        capability "Sensor"
 
 		command "activate"
 		command "deactivate"
 	}
+
+    // UI tile definitions
+    tiles {
+        standardTile("motion", "device.motion", width: 2, height: 2) {
+            state("active", label:'motion', icon:"st.motion.motion.active", backgroundColor:"#53a7c0")
+            state("inactive", label:'no motion', icon:"st.motion.motion.inactive", backgroundColor:"#ffffff")
+        }
+
+        main "motion"
+        details "motion"
+    }
 }
 
 // parse events into attributes
 def parse(String description) {
-	log.debug "Parsing '${description}'"
+	log.debug "Parsing ${description}"
 }
 
 // handle commands
 def activate() {
 	log.debug "Executing 'activate'"
     sendEvent(
-		name: motion,
-		value: active,
+		name: "motion",
+		value: "active",
 		descriptionText: "Motion simulated"
 	)
 }
@@ -42,8 +55,8 @@ def activate() {
 def deactivate() {
 	log.debug "Executing 'deactivate'"
 	sendEvent(
-		name: motion,
-		value: inactive,
+		name: "motion",
+		value: "inactive",
 		descriptionText: "Motion stop simulated"
 	)
 }
